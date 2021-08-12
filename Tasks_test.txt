@@ -1,1 +1,10 @@
-testing to see if upload works
+-testing to see if upload works
+
+Dunamis- attempt to integrate the free data he found to integrate that to the triangle code Nathan found
+
+Joel- Explore twilio/ other python open source
+
+Jide- Explore the currency layer API to see pull historical fiat currency into a data frame and try to test with the triangle code as well
+
+All-Do a hackathon on friday 6-8 
+
