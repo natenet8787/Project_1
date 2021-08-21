@@ -8,7 +8,7 @@ import os
 from twilio.rest import Client
 from dotenv import load_dotenv
 
-#Packages needed for integration between packages
+#Packages needed for desktop notfication
 from plyer import notification
 
 
@@ -50,7 +50,7 @@ def main():
             #auth_token = '7b43a079792a7fae40b49120c09cdf97'
             account_sid = os.getenv('TWILIO_ACCOUNT_SID')
             auth_token = os.getenv('TWILIO_AUTH_TOKEN')
-            print(account_sid, auth_token)
+            #print(account_sid, auth_token)
             client = Client(account_sid, auth_token)
 
             #This tells the user if there is any arb opportunites available
