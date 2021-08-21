@@ -1,30 +1,32 @@
-#Packages needed for triangle arb
+#Packages needed for triangle arb 
+#The bellman ford algo is in the math package
 import json, urllib.request, sys, math, re
 import numpy as np
 
+#Packages needed for twilio notification
 import os
 from twilio.rest import Client
 from dotenv import load_dotenv
 
-#packages needed for integration
+#Packages needed for integration between packages
 from plyer import notification
 
 
-#empty list and dic to properly graph endpoints
+#empty list and dic needed to properly graph endpoints
 graph = {}
 paths = []
 
 
 
-#main function
+#Main function below that runs finds the shortest path rate, and hence the arb opportunity
 def main():
     forex_rates = get_rates()
     print("Current Forex Rates:")
     print(forex_rates)
     print("\n")
-    gr = get_graph(forex_rates)
+    gr = get_graph(forex_rates) #gets the current forex rates
     
-    for key in graph:
+    for key in graph: 
         path = bellman_ford(graph, key)
         if path not in paths and not None:
             paths.append(path)
@@ -33,7 +35,7 @@ def main():
         if path == None:
             print("No Arbitrage opportunity detected in current rates :(")
         else:
-            money = 100
+            money = 100 #base amount of currency we are starting with
             
             notification.notify(title= "<---Arbitrage cycle detected--->",
                     message= "Starting with %(money)i in %(currency)s" % {"money":money,"currency":path[0]},
@@ -42,24 +44,20 @@ def main():
                     toast=False)
 
             load_dotenv() 
-                   
-            account_sid = 'ACcd99d0ef7c6e5a8788f01331229a6bae'
-            auth_token = '7b43a079792a7fae40b49120c09cdf97'
-            #account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-            #auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+
+            #account notification for twilio texting       
+            #account_sid = 'ACcd99d0ef7c6e5a8788f01331229a6bae'
+            #auth_token = '7b43a079792a7fae40b49120c09cdf97'
+            account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+            auth_token = os.getenv('TWILIO_AUTH_TOKEN')
             print(account_sid, auth_token)
             client = Client(account_sid, auth_token)
 
-            #message = client.messages \
-             #           .create(
-              #           body="%(start)s to %(end)s at a rate of %(rate)f = %(money)f" % {"start":start,"end":end,"rate":rate,"money":money},
-               #         from_='+19416134207',
-                #        to='+17247661943'
-                 #       )
-
+            #This tells the user if there is any arb opportunites available
             print("<---Arbitrage cycle detected--->")
             print("Starting with %(money)i in %(currency)s" % {"money":money,"currency":path[0]})
 
+            #Displays the paths available and prints out the oppositite path as well
             for i,value in enumerate(path):
                 if i+1 < len(path):
                     start = path[i]
@@ -67,17 +65,18 @@ def main():
                     rate = math.exp(-graph[start][end])
                     money *= rate
                     print("%(start)s to %(end)s at a rate of %(rate)f = %(money)f" % {"start":start,"end":end,"rate":rate,"money":money})
-       
+
+            #Message to be send via text
             message = client.messages \
                     .create(
                     body="%(start)s to %(end)s at a rate of %(rate)f = %(money)f" % {"start":start,"end":end,"rate":rate,"money":money},
                     from_='+19416134207',
-                    to='+16469155131'
+                    to='+15165547061'
                        )    
         print("\n")
 
 
-#getting the rates 
+#This function gets the current rate via this base API 
 def get_rates():
     try:
         forex_url = urllib.request.urlopen("http://fx.priceonomics.com/v1/rates/")
@@ -90,7 +89,7 @@ def get_rates():
     return rates
 
 
-#getting the graph
+#Graph function that takes the rates from the API and sends it to the graph prior to running bellman ford
 def get_graph(forex_rates):
     pattern = re.compile("([A-Z]{3})_([A-Z]{3})")
     for key in forex_rates:
@@ -104,7 +103,7 @@ def get_graph(forex_rates):
             graph[from_rate][to_rate] = float(conversion_rate)
     return graph
 
-#init paths
+#Uses the graphs we created to start finding the distances from each other
 def initialize(graph, source):
     d = {} # Stands for destination
     p = {} # Stands for predecessor
@@ -137,7 +136,7 @@ def retrace_negative_loop(p, start):
             return arbitrageLoop
 
 
-#bellman_final
+#Final step of bellman_ford algo which finds the convergance
 def bellman_ford(graph, source):
     d, p = initialize(graph, source)
     for i in range(len(graph)-1): #Run this until is converges
