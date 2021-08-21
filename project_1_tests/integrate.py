@@ -38,24 +38,24 @@ def main():
             notification.notify(title= "<---Arbitrage cycle detected--->",
                     message= "Starting with %(money)i in %(currency)s" % {"money":money,"currency":path[0]},
                     app_icon = None,
-                    timeout= 1,
+                    timeout= 30,
                     toast=False)
 
             load_dotenv() 
                    
             account_sid = 'ACcd99d0ef7c6e5a8788f01331229a6bae'
-            auth_token = '04173d66a3e8874725fd6d56e805b132'
+            auth_token = '7b43a079792a7fae40b49120c09cdf97'
             #account_sid = os.getenv('TWILIO_ACCOUNT_SID')
             #auth_token = os.getenv('TWILIO_AUTH_TOKEN')
             print(account_sid, auth_token)
             client = Client(account_sid, auth_token)
 
-            message = client.messages \
-                        .create(
-                         body="Arbitrage Oppurtunity Found!",
-                        from_='+19416134207',
-                        to='+16467966700'
-                        )
+            #message = client.messages \
+             #           .create(
+              #           body="%(start)s to %(end)s at a rate of %(rate)f = %(money)f" % {"start":start,"end":end,"rate":rate,"money":money},
+               #         from_='+19416134207',
+                #        to='+17247661943'
+                 #       )
 
             print("<---Arbitrage cycle detected--->")
             print("Starting with %(money)i in %(currency)s" % {"money":money,"currency":path[0]})
@@ -67,6 +67,13 @@ def main():
                     rate = math.exp(-graph[start][end])
                     money *= rate
                     print("%(start)s to %(end)s at a rate of %(rate)f = %(money)f" % {"start":start,"end":end,"rate":rate,"money":money})
+       
+            message = client.messages \
+                    .create(
+                    body="%(start)s to %(end)s at a rate of %(rate)f = %(money)f" % {"start":start,"end":end,"rate":rate,"money":money},
+                    from_='+19416134207',
+                    to='+16469155131'
+                       )    
         print("\n")
 
 
@@ -145,8 +152,6 @@ def bellman_ford(graph, source):
             if d[v] < d[u] + graph[u][v]:
                 return(retrace_negative_loop(p, source))
     return None
-
-
 
 
 
