@@ -4,6 +4,8 @@
 2.  Proposed solution
     - In order to alleviate this the team have come up with an app that detects any arbitrage opportunity. We used open source python programming as well as several integration packages to bring the user a seemless way to visualize arbitrage opportunities
 
+## Code can be found in the **project_1_tests** folder under the file name **integrate_with_gui.py**
+
 ## Packages
 #General packages needed
 - json,
@@ -27,7 +29,7 @@
 
 ## Instructions
 
-The main function currently has all the functions and paths needed to fully executive the code. Assuming all the packages are properly installed the below code will be fully executable. The code can be found in the **integrate.py**  
+The main function currently has all the functions and paths needed to fully executive the code. Assuming all the packages are properly installed the below code will be fully executable. The code can be found in the **integrate_with_gui.py**  under the **Project_1_tests** folders.
 
 def main():
     forex_rates = get_rates()
@@ -93,8 +95,11 @@ def main():
 - We explored several APIs, including bianance, alpaca and other FX specific API services. We found a lot of issues with many of time, including timely information and formatting issues. We settled on forex economics as the API delivered the fx exchange for a combination of crypto as well as fiat currencies and it was all delivered in a JSON file which we could handle.
 
 ## Code build out
-- Explain our initial ~modular concept
-- Show images of the results from the soltions
+    In our project we divided the work among the people in the group. We divided the work in three parts:
+    1. Math for calculating arbitrage
+    2. Incorporating the messages
+    3. Integrating it all together 
+
 
 ## Next steps
 - Further build out the user interface
